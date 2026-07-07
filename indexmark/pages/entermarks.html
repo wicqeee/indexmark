@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Marks — Index Mark Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="page">
+        <div class="brand">
+            <h1>Index Mark Calculator</h1>
+            <p id="streamLabel">Enter your subject marks</p>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Subject Marks</h2>
+            <form id="marksForm">
+                <div id="subjectFields"></div>
+
+                <div id="errorMsg" class="error-msg"></div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a class="btn btn-ghost" href="index.html">Home</a>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+        if (!getStudentId()) {
+            window.location.href = "login.html";
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const stream = params.get("stream");
+        const subjects = STREAM_SUBJECTS[stream];
+
+        if (!stream || !subjects) {
+            window.location.href = "select-stream.html";
+        }
+
+        document.getElementById("streamLabel").textContent = `Stream: ${stream}`;
+
+        const fieldsContainer = document.getElementById("subjectFields");
+        subjects.forEach((subject, i) => {
+            const label = document.createElement("label");
+            label.setAttribute("for", `subject_${i}`);
+            label.textContent = `${subject} (out of 100)`;
+
+            const input = document.createElement("input");
+            input.type = "number";
+            input.id = `subject_${i}`;
+            input.min = "0";
+            input.max = "100";
+            input.step = "0.01";
+            input.required = true;
+            input.dataset.subject = subject;
+
+            fieldsContainer.appendChild(label);
+            fieldsContainer.appendChild(input);
+        });
+
+        document.getElementById("marksForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const errorMsg = document.getElementById("errorMsg");
+            errorMsg.classList.remove("show");
+
+            const marks = {};
+            subjects.forEach((subject, i) => {
+                marks[subject] = parseFloat(document.getElementById(`subject_${i}`).value);
+            });
+
+            try {
+                const res = await fetch(`${API_BASE}/submit-marks`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ studentId: getStudentId(), marks })
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    errorMsg.textContent = data.message || "Could not submit marks.";
+                    errorMsg.classList.add("show");
+                    return;
+                }
+
+                window.location.href = "result.html";
+            } catch (err) {
+                errorMsg.textContent = "Could not reach the server. Is the backend running?";
+                errorMsg.classList.add("show");
+            }
+        });
+    </script>
+</body>
+
+</html>

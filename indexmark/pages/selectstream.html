@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Stream — Index Mark Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="page">
+        <div class="brand">
+            <h1>Index Mark Calculator</h1>
+            <p>Which stream did you study in Plus Two?</p>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Select Your Stream</h2>
+
+            <div class="stream-grid" id="streamGrid">
+                <div class="stream-option" data-stream="Biomaths">
+                    <div class="stream-icon">🧬</div>
+                    <div class="stream-name">Biomaths</div>
+                </div>
+                <div class="stream-option" data-stream="Computer Science">
+                    <div class="stream-icon">💻</div>
+                    <div class="stream-name">Computer Science</div>
+                </div>
+                <div class="stream-option" data-stream="IP">
+                    <div class="stream-icon">📊</div>
+                    <div class="stream-name">IP</div>
+                </div>
+            </div>
+
+            <div id="errorMsg" class="error-msg"></div>
+
+            <button id="continueBtn" class="btn btn-primary" disabled>Continue</button>
+            <a class="btn btn-ghost" href="index.html">Home</a>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+        if (!getStudentId()) {
+            window.location.href = "login.html";
+        }
+
+        let selectedStream = null;
+        const options = document.querySelectorAll(".stream-option");
+        options.forEach(opt => {
+            opt.addEventListener("click", () => {
+                options.forEach(o => o.classList.remove("selected"));
+                opt.classList.add("selected");
+                selectedStream = opt.dataset.stream;
+                document.getElementById("continueBtn").disabled = false;
+            });
+        });
+
+        document.getElementById("continueBtn").addEventListener("click", async () => {
+            const errorMsg = document.getElementById("errorMsg");
+            errorMsg.classList.remove("show");
+
+            try {
+                const res = await fetch(`${API_BASE}/submit-stream`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ studentId: getStudentId(), stream: selectedStream })
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    errorMsg.textContent = data.message || "Could not save stream.";
+                    errorMsg.classList.add("show");
+                    return;
+                }
+
+                window.location.href = `enter-marks.html?stream=${encodeURIComponent(selectedStream)}`;
+            } catch (err) {
+                errorMsg.textContent = "Could not reach the server. Is the backend running?";
+                errorMsg.classList.add("show");
+            }
+        });
+    </script>
+</body>
+
+</html>

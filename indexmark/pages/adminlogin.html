@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login — Index Mark Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="page">
+        <div class="brand">
+            <h1>Index Mark Calculator</h1>
+            <p>Admin access</p>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Admin Login</h2>
+            <form id="adminLoginForm">
+                <label for="username">Username</label>
+                <input type="text" id="username" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+
+                <div id="errorMsg" class="error-msg"></div>
+
+                <button type="submit" class="btn btn-primary">Login</button>
+                <a class="btn btn-ghost" href="index.html">Home</a>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+        document.getElementById("adminLoginForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const errorMsg = document.getElementById("errorMsg");
+            errorMsg.classList.remove("show");
+
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+
+            try {
+                const res = await fetch(`${API_BASE}/admin-login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    errorMsg.textContent = data.message || "Login failed.";
+                    errorMsg.classList.add("show");
+                    return;
+                }
+
+                localStorage.setItem("isAdmin", "true");
+                window.location.href = "admin-dashboard.html";
+            } catch (err) {
+                errorMsg.textContent = "Could not reach the server. Is the backend running?";
+                errorMsg.classList.add("show");
+            }
+        });
+    </script>
+</body>
+
+</html>

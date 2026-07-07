@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Result — Index Mark Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="page">
+        <div class="brand">
+            <h1>Index Mark Calculator</h1>
+            <p>Here's your result</p>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title" id="nameHeading">Your Index Mark</h2>
+
+            <div class="index-result">
+                <div class="index-value" id="indexValue">--</div>
+                <div class="index-label" id="streamLabel">Stream</div>
+            </div>
+
+            <div class="marks-breakdown" id="marksBreakdown"></div>
+
+            <a class="btn btn-secondary" href="index.html" style="margin-top:24px;">Home</a>
+            <button class="btn btn-ghost" id="logoutBtn">Logout</button>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+        if (!getStudentId()) {
+            window.location.href = "login.html";
+        }
+
+        async function loadResult() {
+            try {
+                const res = await fetch(`${API_BASE}/result?studentId=${getStudentId()}`);
+                const data = await res.json();
+
+                if (!res.ok) {
+                    document.getElementById("indexValue").textContent = "N/A";
+                    return;
+                }
+
+                document.getElementById("nameHeading").textContent = `${data.name}'s Index Mark`;
+                document.getElementById("indexValue").textContent = data.indexMark;
+                document.getElementById("streamLabel").textContent = data.stream;
+
+                const breakdown = document.getElementById("marksBreakdown");
+                breakdown.innerHTML = "";
+                data.marks.forEach(m => {
+                    const row = document.createElement("div");
+                    row.className = "marks-row";
+                    row.innerHTML = `<span class="subject">${m.subject}</span><span class="mark">${m.mark}</span>`;
+                    breakdown.appendChild(row);
+                });
+            } catch (err) {
+                document.getElementById("indexValue").textContent = "N/A";
+            }
+        }
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            clearStudentId();
+            window.location.href = "index.html";
+        });
+
+        loadResult();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account — Index Mark Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="page">
+        <div class="brand">
+            <h1>Index Mark Calculator</h1>
+            <p>Create your student account</p>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Registration</h2>
+            <form id="registerForm">
+                <label for="name">Full name</label>
+                <input type="text" id="name" required>
+
+                <label for="phone">Phone number</label>
+                <input type="tel" id="phone" pattern="[0-9]{10}" placeholder="10 digit number" required>
+
+                <label for="username">Username</label>
+                <input type="text" id="username" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" minlength="6" required>
+
+                <label for="confirmPassword">Re-enter password</label>
+                <input type="password" id="confirmPassword" minlength="6" required>
+
+                <div id="errorMsg" class="error-msg"></div>
+                <div id="successMsg" class="success-msg"></div>
+
+                <button type="submit" class="btn btn-primary">Create Account</button>
+                <div class="btn-row">
+                    <a class="btn btn-secondary" href="login.html">Login</a>
+                    <a class="btn btn-ghost" href="index.html">Home</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const errorMsg = document.getElementById("errorMsg");
+            const successMsg = document.getElementById("successMsg");
+            errorMsg.classList.remove("show");
+            successMsg.classList.remove("show");
+
+            const name = document.getElementById("name").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+
+            if (password !== confirmPassword) {
+                errorMsg.textContent = "Passwords do not match.";
+                errorMsg.classList.add("show");
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/register`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, phone, username, password })
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    errorMsg.textContent = data.message || "Registration failed.";
+                    errorMsg.classList.add("show");
+                    return;
+                }
+
+                setStudentId(data.studentId);
+                successMsg.textContent = "Account created! Redirecting...";
+                successMsg.classList.add("show");
+                setTimeout(() => { window.location.href = "select-stream.html"; }, 800);
+            } catch (err) {
+                errorMsg.textContent = "Could not reach the server. Is the backend running?";
+                errorMsg.classList.add("show");
+            }
+        });
+    </script>
+</body>
+
+</html>
