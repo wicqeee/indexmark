@@ -2,125 +2,241 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard — Index Mark Calculator</title>
+
+    <title>Admin Dashboard</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
+
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Nunito+Sans:wght@400;600;700&display=swap"
         rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
+
     <div class="page">
+
         <div class="top-bar">
-            <button id="logoutBtn" class="btn btn-ghost" style="width:auto; margin-top:0;">Logout</button>
+
+            <button id="logoutBtn" class="btn btn-ghost" style="width:auto;">
+                Logout
+            </button>
+
         </div>
 
         <div class="brand">
+
             <h1>Index Mark Calculator</h1>
-            <p>Admin Dashboard</p>
+
+            <p>Administrator Dashboard</p>
+
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <h3 id="totalStudents">0</h3>
+                <p>Total Students</p>
+            </div>
+
+            <div class="stat-card">
+                <h3 id="highestIndex">0</h3>
+                <p>Highest Index</p>
+            </div>
+
+            <div class="stat-card">
+                <h3 id="averageIndex">0</h3>
+                <p>Average Index</p>
+            </div>
+
+            <div class="stat-card">
+                <h3 id="lowestIndex">0</h3>
+                <p>Lowest Index</p>
+            </div>
+
         </div>
 
         <div class="card wide">
-            <h2 class="card-title">All Students</h2>
 
-            <div class="table-controls">
-                <div class="control-group">
-                    <label for="streamFilter">Filter by stream</label>
-                    <select id="streamFilter">
-                        <option value="all">All streams</option>
-                        <option value="Biomaths">Biomaths</option>
-                        <option value="Computer Science">Computer Science</option>
-                        <option value="IP">IP</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label for="sortOrder">Sort by index mark</label>
-                    <select id="sortOrder">
-                        <option value="desc">Highest to lowest</option>
-                        <option value="asc">Lowest to highest</option>
-                    </select>
-                </div>
+            <h2 class="card-title">Students</h2>
+
+            <p id="studentCount">
+                Total Students : 0
+            </p>
+
+            <div class="control-group">
+
+                <label for="searchStudent">
+                    Search Student
+                </label>
+
+                <input type="text" id="searchStudent" placeholder="Search by name...">
+
             </div>
+
+            <br>
 
             <div id="errorMsg" class="error-msg"></div>
 
+
             <table class="students-table">
+
                 <thead>
+
                     <tr>
-                        <th>Rank</th>
+
+                        <th>ID</th>
+
                         <th>Name</th>
+
                         <th>Username</th>
+
                         <th>Phone</th>
+
                         <th>Stream</th>
+
                         <th>Index Mark</th>
+
+                        <th>Action</th>
+
                     </tr>
+
                 </thead>
-                <tbody id="studentsBody"></tbody>
+
+                <tbody id="studentsBody">
+
+                </tbody>
+
             </table>
+
         </div>
+
     </div>
 
-    <script src="js/config.js"></script>
     <script>
+
         if (localStorage.getItem("isAdmin") !== "true") {
-            window.location.href = "admin-login.html";
+
+            window.location.href = "adminlogin.html";
+
         }
 
-        document.getElementById("logoutBtn").addEventListener("click", () => {
-            localStorage.removeItem("isAdmin");
-            window.location.href = "index.html";
-        });
+        document.getElementById("logoutBtn")
+            .addEventListener("click", () => {
+
+                localStorage.removeItem("isAdmin");
+
+                window.location.href = "index.html";
+
+            });
 
         async function loadStudents() {
-            const stream = document.getElementById("streamFilter").value;
-            const sort = document.getElementById("sortOrder").value;
+
             const errorMsg = document.getElementById("errorMsg");
-            errorMsg.classList.remove("show");
+
+            errorMsg.textContent = "";
 
             try {
-                const res = await fetch(`${API_BASE}/admin/students?stream=${encodeURIComponent(stream)}&sort=${sort}`);
+
+                const search =
+                    document.getElementById("searchStudent").value;
+
+                const res = await fetch(
+                    `/admin/students?search=${encodeURIComponent(search)}`
+                );
+
                 const data = await res.json();
 
-                if (!res.ok) {
-                    errorMsg.textContent = data.message || "Could not load students.";
-                    errorMsg.classList.add("show");
-                    return;
-                }
+                document.getElementById("totalStudents").textContent =
+                    data.stats.totalStudents;
+
+                document.getElementById("highestIndex").textContent =
+                    data.stats.highestIndex;
+
+                document.getElementById("averageIndex").textContent =
+                    data.stats.averageIndex;
+
+                document.getElementById("lowestIndex").textContent =
+                    data.stats.lowestIndex;
 
                 const tbody = document.getElementById("studentsBody");
+
                 tbody.innerHTML = "";
 
-                if (data.students.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No students found.</td></tr>`;
-                    return;
-                }
+                document.getElementById("studentCount").textContent =
+                    `Total Students : ${data.students.length}`;
 
-                data.students.forEach((s, i) => {
-                    const tr = document.createElement("tr");
-                    tr.innerHTML = `
-        <td><span class="rank-badge">${i + 1}</span></td>
-        <td>${s.name}</td>
-        <td>${s.username}</td>
-        <td>${s.phone}</td>
-        <td><span class="stream-tag">${s.stream || "—"}</span></td>
-        <td><strong>${s.indexMark !== null ? s.indexMark : "—"}</strong></td>
-      `;
-                    tbody.appendChild(tr);
+                data.students.forEach(student => {
+
+                    const row = document.createElement("tr");
+
+                    row.innerHTML = `
+
+                <td>${student.id}</td>
+
+                <td>${student.name}</td>
+
+                <td>${student.username}</td>
+
+                <td>${student.phone}</td>
+
+                <td>${student.stream ?? "-"}</td>
+
+                <td>${student.indexMark ?? "-"}</td>
+
+                <td>
+
+                    <button
+                        class="btn btn-secondary editBtn"
+                        data-id="${student.id}">
+                        Edit
+                    </button>
+
+                </td>
+
+            `;
+
+                    tbody.appendChild(row);
+
                 });
-            } catch (err) {
-                errorMsg.textContent = "Could not reach the server. Is the backend running?";
-                errorMsg.classList.add("show");
+
             }
+
+            catch (err) {
+
+                console.error(err);
+
+                errorMsg.textContent = "Could not load students.";
+
+            }
+
         }
 
-        document.getElementById("streamFilter").addEventListener("change", loadStudents);
-        document.getElementById("sortOrder").addEventListener("change", loadStudents);
+        document.addEventListener("click", (e) => {
+
+            if (e.target.classList.contains("editBtn")) {
+
+                const id = e.target.dataset.id;
+
+                window.location.href = `editstudent.html?id=${id}`;
+
+            }
+
+        });
+
+        document.getElementById("searchStudent")
+            .addEventListener("input", loadStudents);
 
         loadStudents();
+
     </script>
+
 </body>
 
 </html>

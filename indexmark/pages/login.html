@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <script src="js/config.js"></script>
+    <!--<script src="js/config.js"></script>-->
     <script>
         document.getElementById("loginForm").addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -50,7 +50,7 @@
             const password = document.getElementById("password").value;
 
             try {
-                const res = await fetch(`${API_BASE}/login`, {
+                const res = await fetch(`/login`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ username, password })
@@ -63,14 +63,21 @@
                     return;
                 }
 
-                setStudentId(data.studentId);
+                localStorage.setItem("studentId", data.studentId);
+                localStorage.setItem("username", username);
 
-                if (data.stream && data.indexMark !== null) {
+                if (!data.stream) {
+
+                    window.location.href = "selectstream.html";
+
+                } else if (data.hasMarks) {
+
                     window.location.href = "result.html";
-                } else if (data.stream) {
-                    window.location.href = `enter-marks.html?stream=${encodeURIComponent(data.stream)}`;
+
                 } else {
-                    window.location.href = "select-stream.html";
+
+                    window.location.href = "entermarks.html";
+
                 }
             } catch (err) {
                 errorMsg.textContent = "Could not reach the server. Is the backend running?";

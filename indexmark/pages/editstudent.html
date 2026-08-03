@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Student</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div class="page">
+
+        <div class="brand">
+
+            <h1>Index Mark Calculator</h1>
+
+            <p>Edit Student Marks</p>
+
+        </div>
+
+        <div class="card">
+
+            <h2 id="studentName">
+                Loading...
+            </h2>
+
+            <p id="studentStream"></p>
+
+            <form id="editForm">
+
+                <div id="subjectFields"></div>
+
+                <br>
+
+                <button class="btn btn-primary" type="submit">
+
+                    Save Changes
+
+                </button>
+
+                <a href="admindashboard.html" class="btn btn-secondary">
+
+                    Back
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        const SUBJECTS = {
+
+            "Biomaths": [
+                "Botany",
+                "Zoology",
+                "Mathematics",
+                "Physics",
+                "Chemistry"
+            ],
+
+            "Computer Science": [
+                "Mathematics",
+                "Physics",
+                "Chemistry",
+                "Computer Science"
+            ],
+
+            "IP": [
+                "Informatics Practices",
+                "Accountancy",
+                "Business Studies",
+                "Economics"
+            ]
+
+        };
+
+        const params = new URLSearchParams(window.location.search);
+
+        const studentId = params.get("id");
+
+        async function loadStudent() {
+
+            try {
+
+                const res = await fetch(`/admin/student/${studentId}`);
+
+                const student = await res.json();
+
+                console.log(student);
+
+                document.getElementById("studentName").textContent = student.name;
+
+                document.getElementById("studentStream").textContent =
+                    `Stream : ${student.stream}`;
+
+                const container =
+                    document.getElementById("subjectFields");
+
+                container.innerHTML = "";
+
+                const subjects = SUBJECTS[student.stream];
+
+                const COLUMN_MAP = {
+                    "Botany": "botany",
+                    "Zoology": "zoology",
+                    "Mathematics": "mathematics",
+                    "Physics": "physics",
+                    "Chemistry": "chemistry",
+                    "Computer Science": "computer_science",
+                    "Informatics Practices": "informatics_practices",
+                    "Accountancy": "accountancy",
+                    "Business Studies": "business_studies",
+                    "Economics": "economics"
+                };
+
+                subjects.forEach(subject => {
+
+                    const column = COLUMN_MAP[subject];
+
+                    const label = document.createElement("label");
+                    label.textContent = subject;
+
+                    const input = document.createElement("input");
+                    input.type = "number";
+                    input.min = 0;
+                    input.max = 100;
+                    input.required = true;
+                    input.name = column;
+                    input.value = student[column] ?? "";
+
+                    container.appendChild(label);
+                    container.appendChild(input);
+                    container.appendChild(document.createElement("br"));
+                    container.appendChild(document.createElement("br"));
+
+                });
+
+            }
+
+            catch (err) {
+
+                console.error(err);
+
+            }
+
+        }
+
+        loadStudent();
+
+        document.getElementById("editForm").addEventListener("submit", async (e) => {
+
+            e.preventDefault();
+
+            const inputs = document.querySelectorAll("#subjectFields input");
+
+            const marks = {};
+
+            inputs.forEach(input => {
+                marks[input.name] = Number(input.value);
+            });
+
+            try {
+
+                const res = await fetch(`/admin/student/${studentId}`, {
+
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({ marks })
+
+                });
+
+                const data = await res.json();
+
+                alert(data.message);
+
+                if (res.ok) {
+                    window.location.href = "admindashboard.html";
+                }
+
+            } catch (err) {
+
+                console.error(err);
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

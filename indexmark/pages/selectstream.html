@@ -44,9 +44,11 @@
         </div>
     </div>
 
-    <script src="js/config.js"></script>
+    <!--     <script src="js/config.js"></script>-->
     <script>
-        if (!getStudentId()) {
+        const studentId = localStorage.getItem("studentId");
+
+        if (!studentId) {
             window.location.href = "login.html";
         }
 
@@ -66,10 +68,10 @@
             errorMsg.classList.remove("show");
 
             try {
-                const res = await fetch(`${API_BASE}/submit-stream`, {
+                const res = await fetch(`/submit-stream`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ studentId: getStudentId(), stream: selectedStream })
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({studentId: studentId, stream: selectedStream})
                 });
                 const data = await res.json();
 
@@ -79,7 +81,7 @@
                     return;
                 }
 
-                window.location.href = `enter-marks.html?stream=${encodeURIComponent(selectedStream)}`;
+                window.location.href = "entermarks.html";
             } catch (err) {
                 errorMsg.textContent = "Could not reach the server. Is the backend running?";
                 errorMsg.classList.add("show");
