@@ -7,7 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Result</title>
-
+    <script>
+        const theme = localStorage.getItem("theme") || "light";
+        document.documentElement.setAttribute("data-theme", theme);
+    </script>
     <link rel="stylesheet" href="style.css">
 
 </head>
@@ -24,35 +27,49 @@
 
         </div>
 
-        <div class="card">
+        <div class="card result-card">
 
-            <h2 id="studentName">Loading...</h2>
+            <div class="result-header">
 
-            <p id="studentStream"></p>
+                <h2 id="studentName">Loading...</h2>
 
-            <hr>
-
-            <div id="marksContainer">
+                <p id="studentStream"></p>
 
             </div>
 
-            <hr>
+            <div class="index-box">
 
-            <h2 id="indexMark">
+                <p class="index-title">
+                    Your Index Mark
+                </p>
 
-            </h2>
+                <h1 id="indexMark" class="big-index">
+                    0.00
+                </h1>
+            </div>
 
-            <br>
+            <h3 class="marks-title">
+                Subject Marks
+            </h3>
 
-            <button id="logoutBtn" class="btn btn-secondary">
-                Logout
-            </button>
+            <div id="marksContainer" class="marks-list">
 
-            <a href="index.html" class="btn btn-ghost">
-                Home
-            </a>
+            </div>
+
+            <div class="btn-row">
+
+                <button id="logoutBtn" class="btn btn-secondary">
+                    Logout
+                </button>
+
+                <a href="index.html" class="btn btn-ghost">
+                    Home
+                </a>
+
+            </div>
 
         </div>
+    </div>
 
     </div>
 
@@ -87,7 +104,7 @@
                     "Stream : " + data.stream;
 
                 document.getElementById("indexMark").textContent =
-                    "Index Mark : " + Number(data.index_mark).toFixed(2);
+                    Number(data.index_mark).toFixed(2);
 
                 const container =
                     document.getElementById("marksContainer");
@@ -113,12 +130,16 @@
 
                     if (subject[1] !== null) {
 
-                        const p = document.createElement("p");
+                        const row = document.createElement("div");
 
-                        p.textContent =
-                            `${subject[0]} : ${subject[1]}`;
+                        row.className = "marks-row";
 
-                        container.appendChild(p);
+                        row.innerHTML = `
+            <span class="subject">${subject[0]}</span>
+            <span class="mark">${subject[1]}</span>
+        `;
+
+                        container.appendChild(row);
 
                     }
 
@@ -146,7 +167,7 @@
         loadResult();
 
     </script>
-
+    <script src="js/theme.js"></script>
 </body>
 
 </html>
