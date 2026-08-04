@@ -4,7 +4,6 @@
 
 - ( This is my college project which i made on my fith semester, So it may have some bugs, mistakes, or areas that can be improved. Sorry if you find any issues, and thank you for your understanding. )
 
----
 ## Features
 
 ### Student
@@ -21,8 +20,6 @@
 - The dashboard shows how many students are submitted marks 
 - It shows Highest index mark , Average index mark and Lowest index mark
 
----
-
 ## Tech Stack
 
 ### Frontend
@@ -37,8 +34,6 @@
 ### Database
 - MySQL
 - phpMyAdmin (XAMPP)
-
----
 
 ## Project Structure
 
@@ -66,8 +61,6 @@
 └── README.md
 ```
 
----
-
 ## Installation
 
 ### 1. Clone the repository
@@ -77,8 +70,6 @@ git clone https://github.com/wicqeee/indexmark.git
 cd indexmark
 ```
 
----
-
 ### 2. Install dependencies
 
 ```bash
@@ -86,8 +77,6 @@ npm install
 ```
 
 This command automatically installs all packages listed in `package.json`. so you don't actually need to install each dependencies separately using npm command
-
----
 
 ### 3. Start XAMPP
 
@@ -103,8 +92,6 @@ cd /opt/lampp
 sudo ./lamp start
 ```
 
----
-
 ## Database Setup
 
 ### Create a database
@@ -114,8 +101,6 @@ Open **phpMyAdmin** and create a database named:
 ```text
 indexmark
 ```
-
----
 
 ### Import the SQL file
 
@@ -130,8 +115,6 @@ This will automatically create required tables:
 - students
 - marks
 - admin
-
----
 
 ## Run the Project
 
@@ -148,13 +131,9 @@ Open this link in your browser:
 http://localhost:3000
 ```
 
----
-
 ## Admin Credentials
 
 you can change the username and password after importing the sql database , you can edit those in **admin** table,default it will be username="admin" , password="admin123"
-
----
 
 ## Screenshots
 
