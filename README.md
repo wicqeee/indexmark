@@ -1,3 +1,4 @@
+
 # Index Mark Calculator
 
 - A website that allows Plus Two students to calculate their college index mark based on their subject marks.it is built using **HTML, CSS, JavaScript, Node.js, Express.js, and MySQL**.
@@ -139,51 +140,35 @@ you can change the username and password after importing the sql database , you 
 
 ### Home
 
-*(Add screenshot here)*
+<img width="1920" height="1080" alt="2026-08-04_14-31-30" src="https://github.com/user-attachments/assets/648077fe-65e8-4c21-91b9-3b347be92485" />
 
----
+### Create new account
 
-### Registration
-
-*(Add screenshot here)*
-
----
+<img width="1920" height="1080" alt="2026-08-04_15-14-10" src="https://github.com/user-attachments/assets/dca932a2-be97-49eb-861d-41ab0f611603" />
 
 ### Login
 
-*(Add screenshot here)*
-
----
+<img width="1920" height="1080" alt="2026-08-04_15-14-36" src="https://github.com/user-attachments/assets/c0b724f1-e895-4de9-aba9-29f0971b0665" />
 
 ### Stream Selection
 
-*(Add screenshot here)*
-
----
+<img width="1920" height="1080" alt="2026-08-04_15-15-49" src="https://github.com/user-attachments/assets/a1b172c7-0fea-428e-8dab-669d1d6dfeb4" />
 
 ### Enter Marks
 
-*(Add screenshot here)*
-
----
+<img width="1920" height="1080" alt="2026-08-04_15-16-26" src="https://github.com/user-attachments/assets/5a75ea2e-7349-4f0e-82ca-7c1a765f13ae" />
 
 ### Result
 
-*(Add screenshot here)*
-
----
+<img width="1920" height="1080" alt="2026-08-04_15-17-25" src="https://github.com/user-attachments/assets/de954622-38dc-47a1-a0c9-024acd7d7599" />
 
 ### Admin Login
 
-*(Add screenshot here)*
-
----
+<img width="1920" height="1080" alt="2026-08-04_15-17-48" src="https://github.com/user-attachments/assets/7bd55bfa-cbeb-4c63-a2c5-00c31c33f1bf" />
 
 ### Admin Dashboard
 
-*(Add screenshot here)*
-
----
+<img width="1920" height="1080" alt="2026-08-04_15-32-15" src="https://github.com/user-attachments/assets/e648c447-0d4e-488f-b8bb-591ce38cd862" />
 
 ### Future Improvements
 
@@ -193,9 +178,3 @@ you can change the username and password after importing the sql database , you 
 - Search and filter students
 - Export results as PDF
 - Improved UI/UX
-
----
-
-### 📄 Note
-
-This project was developed for educational and learning purposes as part of a college project.
