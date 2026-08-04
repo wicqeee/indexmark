@@ -45,28 +45,29 @@
         <div class="stats-grid">
 
             <div class="stat-card">
-                <h3 id="totalStudents">0</h3>
+                <h2 id="totalStudents">0</h2>
                 <p>Total Students</p>
             </div>
 
             <div class="stat-card">
-                <h3 id="highestIndex">0</h3>
+                <h2 id="highestIndex">0</h2>
                 <p>Highest Index</p>
             </div>
 
             <div class="stat-card">
-                <h3 id="averageIndex">0</h3>
+                <h2 id="averageIndex">0</h2>
                 <p>Average Index</p>
             </div>
 
             <div class="stat-card">
-                <h3 id="lowestIndex">0</h3>
+                <h2 id="lowestIndex">0</h2>
                 <p>Lowest Index</p>
             </div>
 
         </div>
+        ]
 
-        <div class="card wide">
+        <div class="card admin-card">
 
             <h2 class="card-title">Students</h2>
 
@@ -121,66 +122,68 @@
 
         </div>
 
-    </div>
+        <script>
 
-    <script>
+            if (localStorage.getItem("isAdmin") !== "true") {
 
-        if (localStorage.getItem("isAdmin") !== "true") {
+                window.location.href = "adminlogin.html";
 
-            window.location.href = "adminlogin.html";
+            }
 
-        }
+            document.getElementById("logoutBtn")
+                .addEventListener("click", () => {
 
-        document.getElementById("logoutBtn")
-            .addEventListener("click", () => {
+                    localStorage.removeItem("isAdmin");
 
-                localStorage.removeItem("isAdmin");
+                    window.location.href = "index.html";
 
-                window.location.href = "index.html";
+                });
 
-            });
+            async function loadStudents() {
 
-        async function loadStudents() {
+                const errorMsg = document.getElementById("errorMsg");
 
-            const errorMsg = document.getElementById("errorMsg");
+                errorMsg.textContent = "";
 
-            errorMsg.textContent = "";
+                try {
 
-            try {
+                    const search =
+                        document.getElementById("searchStudent").value;
 
-                const search =
-                    document.getElementById("searchStudent").value;
+                    const res = await fetch(
+                        `/admin/students?search=${encodeURIComponent(search)}`
+                    );
 
-                const res = await fetch(
-                    `/admin/students?search=${encodeURIComponent(search)}`
-                );
+                    const data = await res.json();
+                    console.log(data);
 
-                const data = await res.json();
+                    document.getElementById("totalStudents").textContent =
+                        data.stats.totalStudents;
 
-                document.getElementById("totalStudents").textContent =
-                    data.stats.totalStudents;
+                    document.getElementById("highestIndex").textContent =
+                        data.stats.highestIndex;
 
-                document.getElementById("highestIndex").textContent =
-                    data.stats.highestIndex;
+                    document.getElementById("averageIndex").textContent =
+                        data.stats.averageIndex;
 
-                document.getElementById("averageIndex").textContent =
-                    data.stats.averageIndex;
+                    document.getElementById("lowestIndex").textContent =
+                        data.stats.lowestIndex;
 
-                document.getElementById("lowestIndex").textContent =
-                    data.stats.lowestIndex;
+                    const tbody = document.getElementById("studentsBody");
+                    console.log("tbody =", tbody);
 
-                const tbody = document.getElementById("studentsBody");
+                    tbody.innerHTML = "";
 
-                tbody.innerHTML = "";
+                    document.getElementById("studentCount").textContent =
+                        `Total Students : ${data.students.length}`;
 
-                document.getElementById("studentCount").textContent =
-                    `Total Students : ${data.students.length}`;
+                    data.students.forEach(student => {
 
-                data.students.forEach(student => {
+                        console.log(student);
 
-                    const row = document.createElement("tr");
+                        const row = document.createElement("tr");
 
-                    row.innerHTML = `
+                        row.innerHTML = `
 
                 <td>${student.id}</td>
 
@@ -206,41 +209,41 @@
 
             `;
 
-                    tbody.appendChild(row);
+                        tbody.appendChild(row);
 
-                });
+                    });
 
-            }
+                }
 
-            catch (err) {
+                catch (err) {
 
-                console.error(err);
+                    console.error(err);
 
-                errorMsg.textContent = "Could not load students.";
+                    errorMsg.textContent = "Could not load students.";
 
-            }
-
-        }
-
-        document.addEventListener("click", (e) => {
-
-            if (e.target.classList.contains("editBtn")) {
-
-                const id = e.target.dataset.id;
-
-                window.location.href = `editstudent.html?id=${id}`;
+                }
 
             }
 
-        });
+            document.addEventListener("click", (e) => {
 
-        document.getElementById("searchStudent")
-            .addEventListener("input", loadStudents);
+                if (e.target.classList.contains("editBtn")) {
 
-        loadStudents();
+                    const id = e.target.dataset.id;
 
-    </script>
-    <script src="js/theme.js"></script>
+                    window.location.href = `editstudent.html?id=${id}`;
+
+                }
+
+            });
+
+            document.getElementById("searchStudent")
+                .addEventListener("input", loadStudents);
+
+            loadStudents();
+
+        </script>
+        <script src="js/theme.js"></script>
 </body>
 
 </html>

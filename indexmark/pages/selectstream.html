@@ -30,17 +30,17 @@
             <div class="stream-options">
 
                 <label class="stream-option">
-                    <input type="radio" name="stream" value="biomaths">
+                    <input type="radio" name="stream" value="Biomaths">
                     <span>Biomaths</span>
                 </label>
 
                 <label class="stream-option">
-                    <input type="radio" name="stream" value="computer_science">
+                    <input type="radio" name="stream" value="Computer Science">
                     <span>Computer Science</span>
                 </label>
 
                 <label class="stream-option">
-                    <input type="radio" name="stream" value="ip">
+                    <input type="radio" name="stream" value="IP">
                     <span>Informatics Practices (IP)</span>
                 </label>
 
@@ -62,14 +62,25 @@
         }
 
         let selectedStream = null;
+
         const options = document.querySelectorAll(".stream-option");
+
         options.forEach(opt => {
+
             opt.addEventListener("click", () => {
+
                 options.forEach(o => o.classList.remove("selected"));
+
                 opt.classList.add("selected");
-                selectedStream = opt.dataset.stream;
+
+                opt.querySelector("input").checked = true;
+
+                selectedStream = opt.querySelector("input").value;
+
                 document.getElementById("continueBtn").disabled = false;
+
             });
+
         });
 
         document.getElementById("continueBtn").addEventListener("click", async () => {

@@ -413,7 +413,7 @@ select:focus {
 
     transform: translateY(-3px);
 
-    background: var(--surface2);
+    background: var(--surface-2);
 
     box-shadow: 0 12px 30px rgba(0, 0, 0, .15);
 
@@ -466,7 +466,7 @@ select:focus {
 
 .index-box {
 
-    background: var(--surface2);
+    background: var(--surface-2);
 
     border: 1px solid var(--border);
 
@@ -526,7 +526,7 @@ select:focus {
 
     padding: 12px 16px;
 
-    background: var(--surface2);
+    background: var(--surface-2);
 
     border-radius: 12px;
 
@@ -587,7 +587,7 @@ select:focus {
     border: 1px solid var(--border);
     border-radius: 14px;
 
-    background: var(--card);
+    background: var(--surface);
 
     cursor: pointer;
 
@@ -608,4 +608,87 @@ select:focus {
 .stream-option span {
     font-size: 1rem;
     font-weight: 600;
+}
+
+/* Chrome, Edge, Safari */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* this is for the admin dashboard */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin: 30px 0;
+}
+
+.stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px;
+    text-align: center;
+}
+
+.stat-card h2 {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.stat-card p {
+    color: var(--text-light);
+}
+
+/* increase spacing */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 16px 14px;
+    text-align: left;
+}
+
+thead {
+    border-bottom: 1px solid var(--border);
+}
+
+tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, .05);
+}
+
+/*searh bar full width */
+
+.search-box {
+    width: 100%;
+    margin: 20px 0;
+}
+
+.search-box input {
+    width: 100%;
+}
+
+/* edit button */
+
+.edit-btn {
+    padding: 8px 18px;
+    border-radius: 10px;
+}
+
+.admin-card {
+    max-width: 1100px;
+    width: 100%;
 }

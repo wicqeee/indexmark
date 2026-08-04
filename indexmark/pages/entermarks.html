@@ -103,10 +103,18 @@
 
             const student = await res.json();
 
+            console.log("Student:", student);
+            console.log("Stream:", student.stream);
+            console.log("Available SUBJECTS:", Object.keys(SUBJECTS));
+
             document.getElementById("streamLabel").textContent =
                 `Stream : ${student.stream}`;
 
+            console.log("Stream from DB:", `"${student.stream}"`);
+
             const subjects = SUBJECTS[student.stream];
+
+            console.log("Subjects:", subjects);
 
             const container = document.getElementById("subjectFields");
 
