@@ -21,7 +21,7 @@
 - The dashboard shows how many students are submitted marks 
 - It shows Highest index mark , Average index mark and Lowest index mark
 
-## Tech Stack
+## Stack
 
 ### Frontend
 - HTML
@@ -170,11 +170,12 @@ you can change the username and password after importing the sql database , you 
 
 <img width="1920" height="1080" alt="2026-08-04_15-32-15" src="https://github.com/user-attachments/assets/e648c447-0d4e-488f-b8bb-591ce38cd862" />
 
-### Future Improvements
+<details>
+<summary><b>Resources that i used</b></summary>
 
-- Password hashing using bcrypt
-- Session-based authentication
-- Responsive mobile design
-- Search and filter students
-- Export results as PDF
-- Improved UI/UX
+- Frontend 
+  - roadmap im following [here](https://roadmap.sh/frontend?r=frontend-beginner)
+  - HTML and CSS [videos](https://youtu.be/ZOx2g9NqtPQ?si=faC-WAbHy6cuwDu_)
+ 
+</details>
+ 
